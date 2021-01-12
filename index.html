@@ -1,55 +1,87 @@
-<!Doctype html>
-<html>
-<style>
-.btn-group button {
-  background-color: #4CAF50; /* Green background */
-  border: 1px solid green; /* Green border */
-  color: white; /* White text */
-  padding: 10px 24px; /* Some padding */
-  cursor: pointer; /* Pointer/hand icon */
-  float: left; /* Float the buttons side by side */
-}
+<!DOCTYPE html>
+<head>
+	<meta charset='UTF-8'>
+	
+	<title>Dynamic Dropdown</title>
+	
+	<link rel='stylesheet' href='css/style.css'>
+	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
-/* Clear floats (clearfix hack) */
-.btn-group:after {
-  content: "";
-  clear: both;
-  display: table;
-}
+	<script>
+		$(function() {
+		
+			$("#text-one").change(function() {
+				$("#text-two").load("textdata/" + $(this).val() + ".txt");
+			});
+			
+			$("#json-one").change(function() {
+			
+				var $dropdown = $(this);
+			
+				$.getJSON("jsondata/data.json", function(data) {
+				
+					var key = $dropdown.val();
+					var vals = [];
+										
+					switch(key) {
+						case 'beverages':
+							vals = data.beverages.split(",");
+							break;
+						case 'snacks':
+							vals = data.snacks.split(",");
+							break;
+						case 'base':
+							vals = ['Please choose from above'];
+					}
+					
+					var $jsontwo = $("#json-two");
+					$jsontwo.empty();
+					$.each(vals, function(index, value) {
+						$jsontwo.append("<option>" + value + "</option>");
+					});
+			
+				});
+			});
 
-.btn-group button:not(:last-child) {
-  border-right: none; /* Prevent double borders */
-}
+		});
+	</script>
+</head>
 
-/* Add a background color on hover */
-.btn-group button:hover {
-  background-color: #3e8e41;
-}
-</style>
 <body>
 
-<h1>Justified Button Group</h1>
+	<div id="page-wrap">
+	
+		<h1>Pulls from text files</h1>
 
-<p>Two buttons in a group:</p>
-<div class="btn-group" style="width:100%">
-  <button style="width:50%">Apple</button>
-  <button style="width:50%">Sony</button>
-</div>
+		<select id="text-one">
+			<option selected value="base">Please Select</option>
+			<option value="beverages">Beverages</option>
+			<option value="snacks">Snacks</option>
+		</select>
+		
+		<br />
+		
+		<select id="text-two">
+			<option>Please choose from above</option>
+		</select>
+		
+		<h1>Pulls from JSON</h1>
 
-<p>Three buttons in a group:</p>
-<div class="btn-group" style="width:100%">
-  <button style="width:33.3%">Apple</button>
-  <button style="width:33.3%">Samsung</button>
-  <button style="width:33.3%">Sony</button>
-</div>
-
-<p>Four buttons in a group:</p>
-<div class="btn-group" style="width:100%">
-  <button style="width:25%">Apple</button>
-  <button style="width:25%">Samsung</button>
-  <button style="width:25%">Sony</button>
-  <button style="width:25%">HTC</button>
-</div>
-
+		<select id="json-one">
+			<option selected value="base">Please Select</option>
+			<option value="beverages">Beverages</option>
+			<option value="snacks">Snacks</option>
+		</select>
+	
+		<br />
+	
+		<select id="json-two">
+			<option>Please choose from above</option>
+		</select>
+	
+	</div>
+	
 </body>
+
 </html>
